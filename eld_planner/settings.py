@@ -65,9 +65,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'eld_planner.wsgi.application'
 
 # Default to SQLite for development; override with DATABASE_URL for prod
-if os.environ.get('DATABASE_URL'):
-    # Optional: parse DATABASE_URL via dj_database_url if installed.
-    # Keeping it simple — direct PostgreSQL config also works:
+if os.environ.get('DB_PASSWORD'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -76,6 +74,10 @@ if os.environ.get('DATABASE_URL'):
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST': os.environ.get('DB_HOST', 'localhost'),
             'PORT': os.environ.get('DB_PORT', '5432'),
+            'OPTIONS': {
+                'sslmode': 'require',
+                'prepare_threshold': None,  # required for Supabase transaction pooler
+            },
         }
     }
 else:
