@@ -32,7 +32,7 @@ Get a free key at https://openrouteservice.org/dev/. The free tier allows
 2,000 directions requests per day, more than enough for development.
 
 Without a key, the app falls back to a great-circle distance estimate
-(road miles ≈ 1.3 × straight-line, average speed 55 mph). This is good
+(road miles ≈ 1.3 × straight-line, average speed 60 mph). This is good
 enough for testing the scheduler and UI but won't reflect real road
 distances.
 
