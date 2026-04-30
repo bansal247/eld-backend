@@ -15,9 +15,10 @@ import requests
 logger = logging.getLogger(__name__)
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
-SAMPLE_INTERVAL_MILES = 100.0  # query around a point every 100 mi along the route
-SEARCH_RADIUS_METERS = 12875   # 8 miles in meters (wider to compensate for sparser samples)
-MAX_DEVIATION_MILES = 5.0      # discard stations farther than 5 mi from the route
+SAMPLE_INTERVAL_MILES = 150.0  # query around a point every 150 mi along the route
+MAX_SAMPLE_POINTS = 20         # hard cap so long routes never overload Overpass
+SEARCH_RADIUS_METERS = 16093   # 10 miles in meters
+MAX_DEVIATION_MILES = 7.0      # discard stations farther than 7 mi from the route
 
 
 # ---------- Haversine (local copy — avoids importing from hos_scheduler) ----------
@@ -48,6 +49,11 @@ def get_fuel_stations_on_leg(geometry: List[List[float]]) -> List[dict]:
     sample_pts = _sample_geometry(geometry, SAMPLE_INTERVAL_MILES)
     if not sample_pts:
         return []
+
+    # If the route is very long, thin the points evenly to stay under the cap
+    if len(sample_pts) > MAX_SAMPLE_POINTS:
+        step = len(sample_pts) / MAX_SAMPLE_POINTS
+        sample_pts = [sample_pts[round(i * step)] for i in range(MAX_SAMPLE_POINTS)]
 
     union_clauses = "\n".join(
         f'node["amenity"="fuel"](around:{SEARCH_RADIUS_METERS},{lat:.5f},{lng:.5f});'
