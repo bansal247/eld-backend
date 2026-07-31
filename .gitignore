@@ -22,12 +22,11 @@ staticfiles/
 media/
 
 # Environment
-.env
-.env.local
 .env.*.local
 
 # IDE
 .idea/
-.vscode/
 *.swp
 .DS_Store
+config.bat
+node_modules

@@ -13,7 +13,7 @@ from .hos_scheduler import Leg
 
 logger = logging.getLogger(__name__)
 
-ORS_URL = "https://api.openrouteservice.org/v2/directions/driving-hgv/geojson"
+ORS_URL = "https://api.openrouteservice.org/v2/directions/driving-car/geojson"
 METERS_PER_MILE = 1609.34
 
 
